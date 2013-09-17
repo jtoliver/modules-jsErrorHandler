@@ -4,7 +4,7 @@ Error handler is used to respond to defined errors. For example, error handler h
 
 ## API
 
-### current_error_states
+### (global) current_error_states
 
 **Returns**
 
