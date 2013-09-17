@@ -40,7 +40,7 @@ Along with ErrorHandler(), the error handler also contains
 - _console.log()
 - _console.warn()
 - _console.info()
--_console.error()
+- _console.error()
 
 All behave the same way as ErrorHandler(), accepting a message, module, and data.
 
