@@ -1,9 +1,10 @@
 {
   "name": "js-error-handler",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "homepage": "https://github.com/natgeo/modules-jsErrorHandler",
   "authors": [
-    "Joshua Toliver <jtoliver@quoininc.com>"
+    "Joshua Toliver <jtoliver@quoininc.com>",
+    "Ben Fonarov <chuwiey@gmail.com>"
   ],
   "description": "National Geographic Error Handler",
   "main": "errors.js",
