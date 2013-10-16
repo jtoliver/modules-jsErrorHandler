@@ -50,6 +50,24 @@ All behave the same way as ErrorHandler(), accepting a message, module, and data
 
 List of defined states in the error handler
 
+## Planned
+#### Send Errors to a service or endpoint to store them
+<code>
+function distribute(message, url) {
+	var timstamp = new Date(),
+		send = { message: message, url: url, timestamp: timestamp };
+	$.ajax({
+		url: "",
+		method: "POST",
+		data: JSON.stringify(send),
+		dataType: "json",
+		success: function() {
+			_logger.log("Endpoint informed about error(" + message + ")", "info", "NatGeo");
+		}
+	});
+}
+</code>
+
 
 
 
