@@ -81,7 +81,7 @@ function ErrorHandler(initOpts) {
 	 * @returns true or false if the the error state is active.
 	 */
 	this.checkState = function(stateCode) {
-		return (state[stateCode]) ? true : false;
+		return (state[stateCode].status) ? true : false;
 	};
 
 	/**
@@ -250,7 +250,7 @@ function ErrorHandler(initOpts) {
 	this.status = function() {
 		var i, output = ['\n Active States \n', '________________________ \n \n'];
 		for(i in state) {
-			if(state.hasOwnProperty(i)) {
+			if(state.hasOwnProperty(i) && state[i].status) {
 				output.push(i + '\n');
 			}
 		}
@@ -325,13 +325,34 @@ function ErrorHandler(initOpts) {
 	 */
 	this.addState = function(stateCode) {
 		if (!state[stateCode]) {
-			state[stateCode] = {};
+			state[stateCode] = {
+				name: stateCode,
+				status: true,
+				callbacks: {
+					fn: [],
+					args: []
+				}
+			};
 		}
 	};
 
+	this.subscribeState = function(stateCode, cb) {
+		this.addState(stateCode);
+		state[stateCode].callbacks.fn.push(cb);
+		state[stateCode].callbacks.args.push(arguments.slice(2));
+		return true;
+	};
+
 	this.removeState = function(stateCode) {
-		if (state[stateCode]) {
-			delete state[stateCode];
+		if (state[stateCode] && state[stateCode].status) {
+			for (var fn in state[stateCode].callbacks.fn) {
+				fn.call(this, state[stateCode].callbacks.args);
+			}
+			state[stateCode].status = false;
+			return true;
+		}
+		else {
+			return false;
 		}
 	};
 
