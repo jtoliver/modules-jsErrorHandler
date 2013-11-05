@@ -1,4 +1,5 @@
 /*global module:false*/
+'use strict';
 module.exports = function(grunt) {
 
     //load matchdep module
@@ -15,16 +16,18 @@ module.exports = function(grunt) {
                 ' * Copyright (c) <%= grunt.template.today("yyyy") %> | <%= pkg.author.name %>;\n' +
                 '**/\n',
 
-        //Task configuration
         uglify: {
             options: {
+                banner: '<%= banner %>'
+            },
+            build: {
                 files: {
                     '<%= pkg.name %>.min.js' : ['<%= pkg.name %>.js']
                 }
             }
         },
 
-          jshint: {
+        jshint: {
             options: {
                 curly: true,
                 eqeqeq: true,
@@ -42,12 +45,11 @@ module.exports = function(grunt) {
                 immed: true,
                 forin: true,
                 indent: 4,
-                quotmark: true,
+                quotmark: true
             }
         },
 
         build: {
-
             tasks: ['default'],
             packageConfig: 'pkg',
             packages: '*.json',
