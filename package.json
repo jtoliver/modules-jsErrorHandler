@@ -1,6 +1,6 @@
 {
   "name": "error",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Module Level Error Handling",
   "main": "error.js",
   "scripts": {
