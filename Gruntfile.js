@@ -1,26 +1,55 @@
 /*global module:false*/
+'use strict';
 module.exports = function(grunt) {
+
+    //load matchdep module
+    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
     // Project configuration
     grunt.initConfig({
         //Metadata
         pkg: grunt.file.readJSON('package.json'),
         gruntfile: 'Gruntfile.js',
-        banner:'',
-
-        //Task configuration
+        banner:'/**\n' +
+                ' * ! <%= pkg.name %> - v<%= pkg.version %>\n' +
+                ' * <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                ' * Copyright (c) <%= grunt.template.today("yyyy") %> | <%= pkg.author.name %>;\n' +
+                '**/\n',
 
         uglify: {
             options: {
+                banner: '<%= banner %>'
+            },
+            build: {
                 files: {
                     '<%= pkg.name %>.min.js' : ['<%= pkg.name %>.js']
                 }
             }
+        },
 
+        jshint: {
+            options: {
+                curly: true,
+                eqeqeq: true,
+                eqnull: true,
+                expr: true,
+                latedef: true,
+                onevar: true,
+                noarg: true,
+                node: true,
+                trailing: true,
+                undef: true,
+                unused: true,
+                browser: true,
+                newcap: true,
+                immed: true,
+                forin: true,
+                indent: 4,
+                quotmark: true
+            }
         },
 
         build: {
-
             tasks: ['default'],
             packageConfig: 'pkg',
             packages: '*.json',
@@ -29,10 +58,6 @@ module.exports = function(grunt) {
         }
     });
 
-    //import plugins
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-bump-build-git');
-
     // Default task
-    grunt.registerTask('default', ['uglify']);
+    grunt.registerTask('default', ['jshint', 'uglify']);
 };
