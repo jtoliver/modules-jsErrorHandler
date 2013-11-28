@@ -344,9 +344,10 @@ function ErrorHandler(initOpts) {
 	};
 
 	this.removeState = function(stateCode) {
+		var fn = state[stateCode].callbacks.fn;
 		if (state[stateCode] && state[stateCode].status) {
-			for (var fn in state[stateCode].callbacks.fn) {
-				fn.call(this, state[stateCode].callbacks.args);
+			for (var i in fn) {
+				fn[i].call(this, state[stateCode].callbacks.args);
 			}
 			state[stateCode].status = false;
 			return true;
