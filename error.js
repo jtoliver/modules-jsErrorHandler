@@ -337,17 +337,20 @@ function ErrorHandler(initOpts) {
 	};
 
 	this.subscribeState = function(stateCode, cb) {
+		var args = Array.prototype.slice.call(arguments);
 		this.addState(stateCode);
 		state[stateCode].callbacks.fn.push(cb);
-		state[stateCode].callbacks.args.push(arguments.slice(2));
+		state[stateCode].callbacks.args.push(args.slice(2));
 		return true;
 	};
 
 	this.removeState = function(stateCode) {
-		var fn = state[stateCode].callbacks.fn;
+		var fn = state[stateCode].callbacks.fn, i;
 		if (state[stateCode] && state[stateCode].status) {
-			for (var i in fn) {
-				fn[i].call(this, state[stateCode].callbacks.args);
+			for (i in fn) {
+				if (fn.hasOwnProperty(i)) {
+					fn[i].call(this, state[stateCode].callbacks.args);
+				}
 			}
 			state[stateCode].status = false;
 			return true;

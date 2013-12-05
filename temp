@@ -1,0 +1,68 @@
+		/**
+		 * Object of defined states. Each state should have a message and a process.
+		 * @type {Object} 
+		 * @private
+		 * @property message - user friendly message.
+		 * @property process - what to do this this error is throw. If is resolved use @state
+		 * to remove the state from  @current_error_states i.e state("remove", "MMDB_TIMEOUT")
+		 */
+		state_manager = {
+			MMDB_TIMEOUT: {
+				message: "We are experiencing some problems. Sit back and we will try again for you.",
+				process: function(lvl, module, data) {
+					if (isCurrentState(current_process)) {
+						var tries = 0,
+							interval = 10000,
+							that = this;
+
+						localStorage.setItem("id", 1); // Just for testing
+						_M.$.ajax({ // TEMP dependancy on _M and jquery -- if you need jquery for the errorHandler, you should make a check for it, and/or load it independantly
+							url: "http://mmdb.natgeo.vm:8000/user/1",
+							type: "GET",
+							dataType: "iframe",
+							target: "mmdb",
+							xhrFields: {
+								withCredentials: true
+							},
+							success: function() {
+								state("remove", this);
+								tries = 0;
+							},
+							error: function(e) {
+								if (e.status === 408 && tries < 3) {
+									$("#login-native-button, #login-facebook-button").hide(); // TEMP a dependancy on jQuery (shouldn"t happen for this module)
+									setTimeout(function() {
+										console_log("Trying mmdb again...", module, "info");
+										that.process(lvl, module, data);
+										tries++;
+									}, interval);
+								}
+							}
+						});
+					}
+				}
+			},
+			TARGET_NOT_ALLOWED: {
+				message: "Target not allowed or doesn\"t have a path.",
+				process: function() {
+				}
+			},
+			ORIGIN_NOT_ALLOWED: {
+				message: "Origin not allowed.",
+				process: function() {
+				}
+			},
+			CORS_IFRAME_TIMEOUT: {
+				message: "Cross-domain iframe failed to load: Timeout (408)",
+				process: function() {
+				}
+			},
+			COOKIES_NOT_ENABLED: {
+				message: "Browser cookies are not enabled",
+				process: function() {
+					if(_M.Util.browser.isCookiesEnabled) { // TEMP this is a dependancy on _M which shouldn"t continue
+						state("remove", this);
+					}
+				}
+			}
+		};
