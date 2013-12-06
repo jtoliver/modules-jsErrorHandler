@@ -167,7 +167,7 @@ function ErrorHandler(initOpts) {
 					console[lvl](logContents, moduleCSS, msgCSS);
 				}
 			} else {
-				console.log('no chrome');
+				console.log(lvl + ': ', msg, module, data);
 			}
 		}
 	};
