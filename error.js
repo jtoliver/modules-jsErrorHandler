@@ -167,7 +167,7 @@ function ErrorHandler(initOpts) {
 					console[lvl](logContents, moduleCSS, msgCSS);
 				}
 			} else {
-				console.log(lvl + ': ', module + '::', module + ' ', data);
+				console.log(lvl + ': ', module + '::', msg + ' ', data);
 			}
 		}
 	};
